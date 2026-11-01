@@ -15,18 +15,13 @@
 <script src="plots.js"></script>
 <style>
 :root {
+  color-scheme: light;
   --bg: #f6f7fb; --surface: #ffffff; --surface-2: #eef1f7; --text: #121826; --muted: #5b6577;
   --border: #dde2ec; --accent: #0f7b6c; --accent-2: #d1495b; --accent-3: #5b4fc4; --accent-4: #e09f3e;
   --grid: rgba(18,24,38,.08); --shadow: 0 10px 30px rgba(18,24,38,.07);
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0b0f19; --surface: #121826; --surface-2: #1a2233; --text: #e8ecf4; --muted: #9aa5b8;
-    --border: #263046; --accent: #3ccfb4; --accent-2: #ff6b7d; --accent-3: #9d8cff; --accent-4: #ffb703;
-    --grid: rgba(232,236,244,.08); --shadow: 0 10px 30px rgba(0,0,0,.35);
-  }
-}
 :root[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #0b0f19; --surface: #121826; --surface-2: #1a2233; --text: #e8ecf4; --muted: #9aa5b8;
   --border: #263046; --accent: #3ccfb4; --accent-2: #ff6b7d; --accent-3: #9d8cff; --accent-4: #ffb703;
   --grid: rgba(232,236,244,.08); --shadow: 0 10px 30px rgba(0,0,0,.35);
@@ -419,7 +414,7 @@ OMP_NUM_THREADS=1 ../.venv/bin/python run_moduleB.py   # designs, ensemble (~30 
         <li>C. Sauvan, J. P. Hugonin, I. S. Maksymov, P. Lalanne, "Theory of the spontaneous optical emission of nanosize photonic and plasmon resonators", Phys. Rev. Lett. 110, 237401 (2013).</li>
         <li>F. J. García de Abajo, "Optical excitations in electron microscopy", Rev. Mod. Phys. 82, 209 (2010).</li>
         <li>J.-W. Henke et al., "Integrated photonics enables continuous-beam electron phase modulation", Nature 600, 653 (2021), <a href="https://arxiv.org/abs/2105.03729">arXiv:2105.03729</a>; A. Feist et al., "Cavity-mediated electron-photon pairs", Science 377, 777 (2022), <a href="https://arxiv.org/abs/2202.12821">arXiv:2202.12821</a>.</li>
-        <li>M. A. Green, "Self-consistent optical parameters of intrinsic silicon at 300 K", Sol. Energ. Mat. Sol. Cells 92, 1305 (2008), via refractiveindex.info (CC0).</li>
+        <li>M. A. Green, "Self-consistent optical parameters of intrinsic silicon at 300 K", Sol. Energy Mater. Sol. Cells 92, 1305 (2008), via refractiveindex.info (CC0).</li>
         <li>J. Schöberl, NGSolve finite-element library, <a href="https://ngsolve.org">ngsolve.org</a>.</li>
       </ol>
     </div>
