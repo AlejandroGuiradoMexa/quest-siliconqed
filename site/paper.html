@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en" style="color-scheme: light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Silicon Cavities and Fast Electrons</title>
+<meta name="description" content="Work sample for the QUEST PhD scholarship in silicon quantum electrodynamics at the deep nanoscale (DTU Electro), in the style of a paper.">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+<script src="plots.js"></script>
+<style>
+/* Latin Modern (GUST Font License), the OpenType version of Knuth's Computer Modern */
+@font-face { font-family: "LM Roman"; src: url(fonts/lmroman10-regular.otf) format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "LM Roman"; src: url(fonts/lmroman10-italic.otf) format("opentype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "LM Roman"; src: url(fonts/lmroman10-bold.otf) format("opentype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "LM Roman"; src: url(fonts/lmroman10-bolditalic.otf) format("opentype"); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: "LM Roman Caps"; src: url(fonts/lmromancaps10-regular.otf) format("opentype"); font-display: swap; }
+@font-face { font-family: "LM Mono"; src: url(fonts/lmmono10-regular.otf) format("opentype"); font-display: swap; }
+
+:root {
+  --ground: #e7e6e1; --sheet: #ffffff; --ink: #111111; --ink-2: #4a4a4a; --rule: #111111; --hair: #c9c8c2; --tint: #f4f3ef;
+  --link: #1f3f8f;
+  
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 17px/1.5 "LM Roman", "Latin Modern Roman", "Computer Modern Serif", Georgia, serif;
+       font-kerning: normal; font-variant-ligatures: common-ligatures; -webkit-font-smoothing: antialiased; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.sc { font-family: "LM Roman Caps", "LM Roman", serif; letter-spacing: .03em; }
+code, pre, .tt { font-family: "LM Mono", "Latin Modern Mono", ui-monospace, monospace; font-size: .94em; }
+sub, sup { line-height: 0; }
+.katex { font-size: 1em; }
+
+/* Running head */
+nav { position: sticky; top: 0; z-index: 10; background: var(--sheet); border-bottom: 1px solid var(--rule); }
+nav .in { max-width: 1040px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 18px; height: 46px; white-space: nowrap; }
+nav .brand { font-family: "LM Roman Caps", serif; letter-spacing: .06em; font-size: 15px; }
+nav .links { display: flex; gap: 13px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; justify-content: safe center; font-size: 15px; }
+nav .links::-webkit-scrollbar { display: none; }
+nav .links a { color: var(--ink-2); }
+nav .links a.active { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+nav .opts { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+nav .opts .lbl { color: var(--ink-2); font-style: italic; }
+
+/* Buttons: rectangular, ruled */
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rule); }
+.seg button { background: transparent; color: var(--ink); border: 0; border-left: 1px solid var(--rule); padding: 2px 10px; font: inherit; font-size: 14px; cursor: pointer; border-radius: 0; }
+.seg button:first-child { border-left: 0; }
+.seg button.on { background: var(--ink); color: var(--sheet); }
+select { background: var(--sheet); color: var(--ink); border: 1px solid var(--rule); border-radius: 0; padding: 2px 6px; font: inherit; font-size: 14px; }
+input[type=range] { accent-color: var(--ink); width: 220px; max-width: 100%; }
+
+/* The sheet */
+.sheet { max-width: 1040px; margin: 28px auto 40px; background: var(--sheet); border: 1px solid var(--hair); padding: 56px 72px 48px; }
+.preprint { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); border-bottom: .5px solid var(--hair); padding-bottom: 6px; }
+.titleblock { text-align: center; margin: 40px 0 26px; }
+h1 { font-weight: 700; font-size: clamp(25px, 3.6vw, 34px); line-height: 1.2; margin: 0 auto 18px; max-width: 800px; }
+.author { font-family: "LM Roman Caps", serif; font-size: 18px; letter-spacing: .04em; }
+.affil { font-style: italic; color: var(--ink-2); font-size: 15px; margin-top: 2px; }
+.abstract { max-width: 720px; margin: 26px auto 0; font-size: 15.5px; text-align: justify; hyphens: auto; }
+.abstract h4 { text-align: center; font-size: 15.5px; margin: 0 0 6px; }
+
+/* Headline results: booktabs-style strip */
+#kpis { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 820px; margin: 22px auto 0; border-top: 1.4px solid var(--rule); border-bottom: 1.4px solid var(--rule); }
+.kpi { padding: 9px 12px; text-align: center; border-left: .5px solid var(--hair); }
+.kpi:first-child { border-left: 0; }
+.kpi b { display: block; font-size: 20px; font-weight: 400; white-space: nowrap; }
+.kpi b small { font-size: 13px; }
+.kpi span { font-size: 13px; color: var(--ink-2); font-style: italic; }
+.kcap { max-width: 820px; margin: 6px auto 0; font-size: 13.5px; color: var(--ink-2); text-align: center; }
+
+/* Sections */
+section { padding-top: 34px; scroll-margin-top: 54px; counter-increment: sec; }
+h2 { font-size: 22px; font-weight: 700; margin: 0 0 12px; display: flex; gap: 16px; align-items: baseline; }
+h2::before { content: counter(sec); min-width: 1.2em; }
+#evidence h2::before { content: counter(sec); }
+p { margin: 0 0 12px; text-align: justify; hyphens: auto; }
+.task { margin: 0 0 18px; text-align: justify; hyphens: auto; }
+.task .hd { font-weight: 700; }
+.task .nm { font-style: italic; }
+.eq { margin: 10px 0 14px; text-align: center; overflow-x: auto; }
+
+/* Figures: two panels per row, (a)(b)… labels, numbered caption */
+body { counter-reset: sec fig tab; }
+figure.fig { margin: 18px 0 24px; counter-increment: fig; }
+.panels { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 28px; }
+.panel { min-width: 0; counter-increment: sub; }
+.panels { counter-reset: sub; }
+.panel > .ph { font-size: 15px; margin: 0 0 4px; }
+.panel > .ph::before { content: "(" counter(sub, lower-alpha) ") "; }
+.ctl { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin: 2px 0 6px; font-size: 14px; min-height: 26px; }
+.ctl label { font-style: italic; color: var(--ink-2); }
+.readout { font-family: "LM Mono", monospace; font-size: 13.5px; }
+.plot { width: 100%; height: 340px; border: 0; }
+.sub-ph { font-size: 15px; margin: 14px 0 2px; }
+figcaption.cap { margin-top: 12px; font-size: 14.5px; text-align: justify; hyphens: auto; padding-top: 8px; border-top: .5px solid var(--hair); }
+figcaption.cap::before { content: "Figure " counter(fig) ": "; font-weight: 700; }
+.small { font-size: 14px; color: var(--ink-2); }
+
+/* ROOT figures (static, vector) shown instead of the interactive plots */
+.rootfig { display: none; margin: 0; }
+.rootfig a { display: block; }
+.rootfig img { display: block; width: 100%; height: auto; background: #fff; border: .5px solid var(--hair); }
+.rootfig figcaption { font-size: 13px; color: var(--ink-2); font-style: italic; margin-top: 4px; }
+body.root-mode .rootfig.has { display: block; }
+body.root-mode .plot.has-root, body.root-mode .live-only { display: none; }
+
+/* Booktabs tables */
+.tblwrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+table.bt { border-top: 1.4px solid var(--rule); border-bottom: 1.4px solid var(--rule); }
+table.bt th { font-weight: 400; font-style: italic; text-align: left; padding: 5px 8px; border-bottom: .8px solid var(--rule); }
+table.bt td { padding: 4px 8px; }
+table.bt td.num, table.bt th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tcap { font-size: 14.5px; margin: 6px 0 8px; counter-increment: tab; }
+.tcap::before { content: "Table " counter(tab) ": "; font-weight: 700; }
+/* Result statistics as a compact ruled table */
+.stats { display: grid; grid-template-columns: 1fr 1fr; margin-top: 10px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.stat { padding: 5px 8px; border-bottom: .5px solid var(--hair); display: flex; flex-direction: column; }
+.stat:nth-last-child(-n+2) { border-bottom: 0; }
+.stat b { font-weight: 400; font-family: "LM Mono", monospace; font-size: 14.5px; }
+.stat span { font-size: 13px; color: var(--ink-2); font-style: italic; }
+
+ul.items { margin: 4px 0 12px; padding-left: 22px; text-align: justify; }
+ul.items li { margin: 3px 0; }
+.code { font-size: 14px; margin: 6px 0 0; color: var(--ink-2); }
+.code a { font-family: "LM Mono", monospace; font-size: 13.5px; }
+.code a + a::before { content: " · "; color: var(--ink-2); }
+pre.verb { margin: 6px 0 12px; padding: 8px 0; border-top: .5px solid var(--hair); border-bottom: .5px solid var(--hair); white-space: pre-wrap; font-size: 13.5px; overflow-x: auto; }
+dl.desc { margin: 4px 0 12px; }
+dl.desc dt { font-weight: 700; display: inline; }
+dl.desc dt::after { content: " "; }
+dl.desc dd { display: inline; margin: 0; }
+dl.desc dd::after { content: ""; display: block; margin-bottom: 5px; }
+.figlist { font-size: 14px; columns: 3 200px; column-gap: 24px; margin: 4px 0 12px; }
+.figlist a { display: block; font-family: "LM Mono", monospace; font-size: 13.5px; }
+
+
+
+.refs { font-size: 14.5px; padding-left: 0; list-style: none; counter-reset: ref; }
+.refs li { counter-increment: ref; display: grid; grid-template-columns: 2.4em 1fr; margin: 4px 0; }
+.refs li::before { content: "[" counter(ref) "]"; }
+footer { max-width: 1040px; margin: 0 auto 40px; padding: 0 16px; font-size: 13px; color: var(--ink-2); text-align: center; }
+
+@media (max-width: 860px) {
+  .sheet { padding: 32px 24px; margin: 0; border-left: 0; border-right: 0; }
+  .panels { grid-template-columns: 1fr; }
+  #kpis { grid-template-columns: 1fr 1fr; }
+  .kpi:nth-child(3) { border-left: 0; }
+  .kpi:nth-child(n+3) { border-top: .5px solid var(--hair); }
+}
+@media (max-width: 700px) {
+  body { font-size: 16px; }
+  nav .in { flex-wrap: wrap; height: auto; padding-top: 6px; padding-bottom: 6px; row-gap: 4px; }
+  nav .brand { margin-right: auto; }
+  nav .opts .lbl { display: none; }
+  nav .links { order: 3; flex-basis: 100%; justify-content: flex-start; }
+  section { scroll-margin-top: 112px; }
+  .sheet { padding: 24px 16px; }
+  .preprint span:last-child { display: none; }
+  .plot { height: 300px; }
+  .stats { grid-template-columns: 1fr; }
+  .stat:nth-last-child(2) { border-bottom: .5px solid var(--hair); }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<nav>
+  <div class="in">
+    <span class="brand">Silicon cavities and fast electrons</span>
+    <div class="links"><a href="#scope">1 Scope</a><a href="#A">2 Modes</a><a href="#B">3 Cavity</a><a href="#C">4 Electrons</a><a href="#D">5 Colour centre</a><a href="#outlook">6 Outlook</a><a href="#evidence">7 Code</a></div>
+    <div class="opts"><span class="seg" id="layout" role="group" aria-label="Page layout"><button data-href="./">Web</button><button class="on" aria-current="page">Paper</button></span>
+      <span class="seg" id="view" role="group" aria-label="Figure style"><button data-v="live" class="on">Interactive</button><button data-v="root">PDF</button></span></div>
+  </div>
+</nav>
+
+<article class="sheet">
+  <div class="preprint"><span>Work sample for the application to the <a href="https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_2001/job/8305/" target="_blank" rel="noopener">QUEST PhD scholarship at DTU Electro</a></span><span>October 2026</span></div>
+
+  <header class="titleblock">
+    <h1>Silicon cavities for colour centres and fast electrons: a small-scale rebuild with quasinormal modes, perturbation theory and a master equation</h1>
+    <div class="author">Alejandro Guirado</div>
+    <div class="affil">Applicant, PhD scholarship in Silicon Quantum Electrodynamics at the Deep Nanoscale, DTU Electro (QUEST doctoral network)</div>
+  </header>
+
+  <div class="abstract">
+    <h4>Abstract</h4>
+    <p>This document accompanies my application to the <a href="https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_2001/job/8305/" target="_blank" rel="noopener">PhD scholarship in Silicon Quantum Electrodynamics at the Deep Nanoscale</a>.
+      The project designs silicon cavities with deep-subwavelength confinement, describes them with modal expansions, and connects them to fast electrons and to embedded colour
+      centres. I build each step at small scale and test it against an exact or published result. Quasinormal-mode (QNM) expansions of a dielectric barrier reproduce the
+      convergence published in [1] (error <span data-k="S.a_conv_total"></span> with <span data-k="S.a_conv_n"></span> QNMs, against <span data-k="S.a_conv_total_pub"></span> from its fit), and a 2D finite-element
+      QNM solver with perfectly matched layers agrees with the exact QNMs of a cylinder to <span data-k="S.a_cyl_err"></span>. The silicon nanobeam used in [2] to enhance a G centre, modelled in 2D
+      with an effective index, gives a mode volume of <span data-k="B.designs.nanobeam.V3" data-f="f3"></span> (λ/n)³ against 0.26 from 3D FDTD; a 10 nm silicon bowtie reduces the mode area
+      <span data-k="S.b_area_ratio"></span> times. First-order QNM perturbation theory predicts the spread of the resonance under random fabrication errors. A passing electron couples best to the nanobeam
+      mode at <span data-k="S.c_T_nb"></span> keV, and a single QNM reproduces its energy loss. A master-equation model of the G centre shows that the measured lifetimes of [2] require a quantum
+      efficiency of at least <span data-k="S.d_eps_min"></span>, and that strong coupling needs the bowtie and Q above <span data-k="S.d_Q_strong_bt"></span>. All numbers are computed by code in the
+      <a href="REPO">accompanying repository</a>.</p>
+  </div>
+  <div id="kpis"></div>
+  <div class="kcap">Headline results of this study, with the published or exact references.</div>
+
+  <section id="scope">
+    <h2>Purpose and scope</h2>
+    <p class="task">The call asks for the theory, design and modelling of silicon cavities with deep-subwavelength confinement, using numerical simulations and modal expansions of the
+      electromagnetic field; designs with the specifications that fabrication needs, and models to interpret the measurements of the project partners; the interaction of cavity fields
+      with fast electrons for transmission-electron-microscope experiments; and the quantum optics of such cavities with embedded colour centres. Sections 2–5 build each step at small
+      scale, in two dimensions where the PhD would work in three. Table 1 maps the tasks to the sections; Table 2 lists the checks.</p>
+    <div class="tcap">Tasks of the call (paraphrased) and the sections that address them.</div>
+    <div class="tblwrap"><table class="bt">
+      <tr><th>Task in the call</th><th class="num">Section</th></tr>
+      <tr><td>Numerical simulations and modal expansions of electromagnetic fields</td><td class="num"><a href="#A">2</a></td></tr>
+      <tr><td>Silicon cavities with deep-subwavelength confinement, designed with the specifications fabrication needs</td><td class="num"><a href="#B">3</a></td></tr>
+      <tr><td>Models to interpret the measurements of the project partners</td><td class="num"><a href="#B">3</a>, <a href="#D">5</a></td></tr>
+      <tr><td>Interaction of cavity fields with fast electrons, for electron-microscope experiments</td><td class="num"><a href="#C">4</a></td></tr>
+      <tr><td>Quantum optics of the cavities with embedded colour centres</td><td class="num"><a href="#D">5</a></td></tr>
+    </table></div>
+    <div class="tcap" style="margin-top:18px">Checks against independent results.</div>
+    <div class="tblwrap"><table class="bt" id="cmp-table"><tr><th>Quantity</th><th class="num">This study</th><th class="num">Reference</th></tr></table></div>
+    <p class="small" style="margin-top:10px"><b>Built for this study:</b> a 2D finite-element Maxwell solver (Nédélec elements of any order, NGSolve [12]) with perfectly matched layers, a shift-and-invert
+      search for the QNMs and their PML normalisation [8]; QNM expansions of a transmission, a Purcell factor and an electron energy loss, each against a direct solution; first-order
+      QNM perturbation theory for moving boundaries; a Lindblad master equation for a two-level emitter and one mode. <span data-k="S.ntests"></span> unit tests run in continuous integration.</p>
+  </section>
+
+  <section id="A">
+    <h2>Quasinormal modes against exact results</h2>
+    <p class="task"><span class="hd">Task: modal expansions of electromagnetic fields.</span> A QNM solves Maxwell's equations without sources and radiates outwards; its frequency
+      $\tilde\omega = \omega - i\gamma$ is complex and $Q = \omega/2\gamma$. Normalised QNMs expand the response of a resonator [1]. I check each piece against an exact result: the dielectric
+      barrier of [1] in 1D (refractive index $n = \pi$, analytic QNMs); a 2D finite-element solver against the exact QNMs of a silicon cylinder ($n$ = 3.48, $R$ = 0.5 µm, in-plane electric
+      field), whose QNMs are the roots of $J_m'(nkR)/[nJ_m(nkR)] = H_m'(kR)/H_m(kR)$; and the Purcell factor from the QNMs against the direct solution with a source.</p>
+    <figure class="fig">
+      <div class="panels">
+        <div class="panel"><div class="ph">Dielectric barrier of [1]</div>
+          <div class="ctl"><span class="seg" id="A1-c"><button data-c="T" class="on">Transmission</button><button data-c="err">Error</button><button data-c="conv">Convergence</button></span></div>
+          <div id="plot-A1" class="plot"></div></div>
+        <div class="panel"><div class="ph">2D QNMs of a cylinder, FEM vs exact</div><div class="ctl"></div>
+          <div id="plot-A2" class="plot"></div></div>
+        <div class="panel"><div class="ph">2D Purcell factor</div>
+          <div class="ctl live-only"><span class="seg" id="A3-c"><button data-c="radial" class="on">Radial</button><button data-c="azimuthal">Azimuthal</button></span></div>
+          <div id="plot-A3" class="plot"></div></div>
+        <div class="panel"><div class="ph">Results</div><div class="stats" id="stats-A"></div></div>
+      </div>
+      <figcaption class="cap">(a) Transmission of the barrier, exact and with the three QNMs $n$ = 3, 4, 5; error with one and three QNMs; convergence with $2N+1$ QNMs at $\omega_0 = 4c/L$
+        and the fits printed in Fig. 22 of [1]. (b) Relative error of the finite-element QNMs against the exact roots versus element order (PML absorption α = 2i). (c) Purcell factor of a dipole
+        80 nm inside the rim, near the $m$ = 4 QNM ($Q$ = <span data-k="A.cylinder.modes.2.Q" data-f="f0"></span>): direct solution and the degenerate QNM pair.</figcaption>
+    </figure>
+    <p><b>Method.</b> In 1D the QNMs are analytic [1]: $\tilde\omega_mL/c = [2\pi m + i\ln((n-1)^2/(n+1)^2)]/2n$, with field $e^{in\tilde k_mx} + (-1)^m e^{-in\tilde k_mx}$ inside the barrier and norm
+      $(-1)^m2n^2L$. The total field is expanded as $E \approx \sum_m a_m\tilde f_m/(\omega - \tilde\omega_m)$, with $a_m$ from the incoming field at the two surfaces, and the scattered field with
+      $b_m = -\tfrac{\omega}{2}\int\tilde f_m\,\Delta\varepsilon\,E_{\rm in}\,dx$ in place of $a_m$. In 2D the curl–curl equation is discretised with Nédélec elements, a radial PML closes the domain, and shift-and-invert Arnoldi on
+      $(\mathsf A - \sigma\mathsf M)^{-1}\mathsf M$ finds the QNMs, normalised with $\mathbf e^T\mathsf M\mathbf e = 1$ (unconjugated, PML included [8]). Spurious PML modes are rejected by their weight in the PML.</p>
+    <p><b>Result.</b> With three QNMs the transmission error has its minimum, <span data-k="A.barrier.min_err3" data-f="pct"></span>, at $\omega L/c = 4$ (one QNM: <span data-k="A.barrier.min_err1" data-f="pct"></span>);
+      [1] reports about 2% and 7%. The fitted convergence laws, <span data-k="S.a_fit_total"></span> (total field) and <span data-k="S.a_fit_scat"></span> (scattered field), match the fits printed in [1].
+      The finite-element QNMs converge exponentially with the element order to <span data-k="S.a_cyl_err"></span> (order <span data-k="S.a_cyl_order"></span>) for $Q$ from 10 to 14 000. At the
+      Purcell peak, the QNM pair agrees with the direct solution to <span data-k="A.purcell2d.radial.peak_err" data-f="pct2"></span> (radial dipole) and <span data-k="A.purcell2d.azimuthal.peak_err" data-f="pct2"></span>
+      (azimuthal); away from the peak the azimuthal dipole also couples to modes the pair leaves out.</p>
+  </section>
+
+  <section id="B">
+    <h2>A silicon cavity for the G centre</h2>
+    <p class="task"><span class="hd">Tasks: design with the specifications fabrication needs; models to interpret measurements.</span> The starting point is the nanobeam with which [2] enhanced a single
+      G centre: 220 nm silicon-on-insulator, holes of radius 115 nm and period 350 nm, a four-hole taper to 85 nm and 250 nm, beam width 520 nm (symmetric here, six mirror holes on each side).
+      The membrane is modelled in 2D with the effective index $n_{\rm eff}$ = <span data-k="B.membrane.n_eff" data-f="f3"></span> of its TE<sub>0</sub> slab mode ($n_{\rm Si}$ = <span data-k="B.membrane.n_si" data-f="f3"></span>
+      at 1278 nm [11]); all in-plane dimensions are scaled to put the cavity mode at 1278 nm. A silicon bowtie at the centre, left between two air trapezoids that replace the innermost holes,
+      concentrates the field in a bridge of width $w$.</p>
+    <div class="tcap">The two designs. $A = 1/{\rm Re}(\varepsilon\tilde f_y^2)$ at the centre for the normalised QNM; $V \approx A\,h_{\rm eff}$ with $h_{\rm eff}$ = <span data-k="B.membrane.h_eff" data-f="nm"></span> nm.</div>
+    <div class="tblwrap"><table class="bt" id="design-table"><tr><th>Design</th><th class="num">scale</th><th class="num">λ (nm)</th><th class="num">in-plane Q</th><th class="num">A (nm²)</th><th class="num">A/(λ/2n<sub>eff</sub>)²</th><th class="num">V, (λ/n<sub>Si</sub>)³</th></tr></table></div>
+    <figure class="fig">
+      <div class="panels">
+        <div class="panel"><div class="ph">Field of the cavity QNM</div>
+          <div class="ctl live-only"><span class="seg" id="B1-c"><button data-c="nanobeam" class="on">Nanobeam</button><button data-c="bowtie">Bowtie</button></span></div>
+          <div id="plot-B1" class="plot" style="height:260px"></div></div>
+        <div class="panel"><div class="ph">The bowtie, $w$ = 10 nm</div><div class="ctl"></div>
+          <div id="plot-B2" class="plot" style="height:260px"></div></div>
+        <div class="panel"><div class="ph">Bridge width</div><div class="ctl"></div>
+          <div id="plot-B3" class="plot"></div></div>
+        <div class="panel"><div class="ph">Random fabrication errors</div>
+          <div class="ctl"><span class="seg" id="B4-c"><button data-c="spread" class="on">Spread</button><button data-c="linear">Sample by sample</button></span></div>
+          <div id="plot-B4" class="plot"></div></div>
+      </div>
+      <figcaption class="cap">(a) $|\mathbf E|^2$ of the normalised QNM (the bowtie scale is saturated at 15%). (b) Zoom on the bowtie. (c) Mode area relative to the nanobeam and in-plane Q versus
+        bridge width. (d) Standard deviation of λ for random errors of every hole radius and position (<span data-k="S.b_ens_n"></span> samples per σ): re-simulation and first-order theory; and the
+        sample-by-sample comparison at σ = <span data-k="S.b_ens_sigma"></span> nm.</figcaption>
+    </figure>
+    <p><b>Method.</b> First-order perturbation theory for moving boundaries [7], written with unconjugated products of the normalised QNM,
+      $\delta\tilde k = -\tfrac{\tilde k}{2}\oint h\,[\Delta\varepsilon\,\tilde f_\parallel^2 - \Delta(\varepsilon^{-1})\tilde D_\perp^2]\,dl$, gives the complex shift for any change of a hole or of the
+      bridge. Summed over random hole errors, it predicts the distribution of the resonance, the approach of [6] for random surface deformations.</p>
+    <p><b>Result.</b> The nanobeam mode volume is <span data-k="B.designs.nanobeam.V3" data-f="f3"></span> (λ/n)³, against 0.26 from the 3D FDTD calculation of [2]. The bowtie reduces the mode area
+      <span data-k="S.b_area_ratio"></span> times at $w$ = 10 nm; the area falls roughly in proportion to $w$, while the in-plane Q falls from about 10<sup>5</sup> to about 3 300. Halving the elements at the bridge or raising
+      the order from 3 to 4 changes A by at most <span data-k="S.b_mesh_A"></span> and Q by <span data-k="S.b_mesh_Q"></span>. Perturbation theory agrees with re-simulation to <span data-k="S.b_pert_err"></span>
+      (all holes grown) and <span data-k="S.b_dw_err"></span> (bridge widened). As specifications: growing all holes by 1 nm shifts the nanobeam mode by <span data-k="S.b_dlam_dr"></span> nm, and widening the
+      bridge by 1 nm shifts the bowtie mode by +<span data-k="S.b_dlam_dw"></span> nm. For σ = <span data-k="S.b_ens_sigma"></span> nm errors the spread of λ is <span data-k="S.b_ens.nanobeam.std"></span> nm
+      (nanobeam) and <span data-k="S.b_ens.bowtie.std"></span> nm (bowtie), against <span data-k="S.b_ens.nanobeam.pred"></span> and <span data-k="S.b_ens.bowtie.pred"></span> nm predicted. In 3D, the bowtie of [3]
+      reaches 0.083 (λ/2n<sub>Si</sub>)³; the 2D model cannot be compared with it directly, and its Q lacks the radiation out of the membrane (measured Q of the nanobeam of [2]: 4 600).</p>
+  </section>
+
+  <section id="C">
+    <h2>Fast electrons passing the cavity</h2>
+    <p class="task"><span class="hd">Task: interaction of cavity fields with fast electrons.</span> An electron moving at speed $v$ on a straight line exchanges energy with a mode through the Fourier
+      component of the field at $q = \omega/v$ along its path [9]. The trajectory is aloof, in the plane of the membrane, parallel to the beam at a distance $b$ from its edge; in 2D the electron is a line
+      charge. I compute the coupling integral $C(v) = \int\tilde f_x(x, y_e)e^{-i\omega x/v}dx$ of the normalised QNM, which sets the electron–photon coupling in photon-induced near-field electron
+      microscopy [10], and the energy-loss spectrum $\Gamma(\omega) \propto -{\rm Re}\int dx\,e^{-iqx}E^{\rm ind}_x(x, y_e)$, directly (scattered-field FEM driven by the field of the moving charge,
+      $\phi \propto e^{iqx - \kappa|y - y_e|}$ with $\kappa = q/\gamma$) and from the single QNM.</p>
+    <figure class="fig">
+      <div class="panels">
+        <div class="panel"><div class="ph">Coupling versus electron energy</div>
+          <div class="ctl live-only"><span class="seg" id="C1-c"><button data-c="nanobeam" class="on">Nanobeam</button><button data-c="bowtie">Bowtie</button></span></div>
+          <div id="plot-C1" class="plot"></div></div>
+        <div class="panel"><div class="ph">Spatial spectrum along the trajectory</div><div class="ctl"></div>
+          <div id="plot-C2" class="plot"></div></div>
+        <div class="panel"><div class="ph">Energy loss near the resonance</div>
+          <div class="ctl live-only"><span class="seg" id="C3-c"><button data-c="nanobeam" class="on">Nanobeam</button><button data-c="bowtie">Bowtie</button></span></div>
+          <div id="plot-C3" class="plot"></div></div>
+        <div class="panel"><div class="ph">Results</div><div class="stats" id="stats-C"></div></div>
+      </div>
+      <figcaption class="cap">(a) $|C(v)|^2$ for $b$ = 20, 50 and 100 nm. (b) Spatial spectrum of $\tilde f_x$ at $b$ = 50 nm, in units of $\pi/a$ (mirror period $a$). (c) Energy-loss spectrum at the energy of best
+        coupling and $b$ = 50 nm: direct solution and single QNM.</figcaption>
+    </figure>
+    <p><b>Result.</b> The coupling peaks at <span data-k="S.c_T_nb"></span> keV (nanobeam) and <span data-k="S.c_T_bt"></span> keV (bowtie) for all three distances. The spatial spectrum peaks at
+      $q$ = <span data-k="S.c_qpeak.nanobeam"></span> π/a, next to the band edge of the mirror, and phase matching $v = \omega a/\pi$ gives <span data-k="S.c_T_pi_a"></span> keV. Above the peak the bowtie keeps much more
+      coupling (at 300 keV, <span data-k="S.c_tail.bowtie"></span> of its maximum against <span data-k="S.c_tail.nanobeam"></span>): the field concentrated at the bowtie has a broader spatial spectrum. Near the resonance
+      the single QNM reproduces the loss peak to <span data-k="S.c_eels_err.nanobeam"></span> (nanobeam) and <span data-k="S.c_eels_err.bowtie"></span> (bowtie); the direct spectrum is positive everywhere, as it must be
+      for a passive structure. A line charge on an aloof path is the simplest geometry; trajectories near and through the membrane need the 3D field.</p>
+  </section>
+
+  <section id="D">
+    <h2>A G centre in the cavity</h2>
+    <p class="task"><span class="hd">Task: quantum optics with embedded colour centres.</span> The G centre emits at 1278 nm with a lifetime of 5.97 ns in the nanobeam outside the cavity, a Debye–Waller factor of
+      15% and a quantum efficiency ε of 1–10% [2]. From $\Gamma_{\rm ZPL} = {\rm DW}\,\varepsilon\,\Gamma_0 = n\omega^3\mu^2/(3\pi\varepsilon_0\hbar c^3)$, μ = <span data-k="S.d_mu.qe1"></span> D (ε = 1%) to
+      <span data-k="S.d_mu.qe10"></span> D (10%); a mode volume $V$ gives $\hbar g = \mu\sqrt{\hbar\omega/2\varepsilon_0n^2V}$. Emitter and mode follow the Lindblad master equation of the Jaynes–Cummings model with
+      cavity loss κ = ω/Q, emitter decay γ = 1/τ<sub>0</sub> and pure dephasing γ*, set to <span data-k="S.d_gamma_star_GHz"></span> GHz × 2π from the 0.091 nm linewidth measured in [2] (an upper bound).</p>
+    <div class="tcap">Coupling strength for ε = 10%, at the measured Q = 4 600 of [2]. Strong coupling: $4g > \kappa + \gamma + 2\gamma^*$.</div>
+    <div class="tblwrap"><table class="bt" id="g-table"><tr><th>Mode volume from</th><th class="num">V, (λ/n)³</th><th class="num">g/2π (GHz)</th><th class="num">κ/2π (GHz)</th><th class="num">F<sub>P</sub></th><th class="num">Q for strong coupling</th></tr></table></div>
+    <figure class="fig">
+      <div class="panels">
+        <div class="panel"><div class="ph">Weak or strong coupling</div><div class="ctl"></div>
+          <div id="plot-D1" class="plot"></div></div>
+        <div class="panel"><div class="ph">Emitter decay in the bowtie cavity</div><div class="ctl"></div>
+          <div id="plot-D2" class="plot"></div></div>
+        <div class="panel"><div class="ph">Anticrossing, bowtie, Q = 10<sup>6</sup></div><div class="ctl"></div>
+          <div id="plot-D3" class="plot"></div></div>
+        <div class="panel"><div class="ph">Results</div><div class="stats" id="stats-D"></div></div>
+      </div>
+      <figcaption class="cap">(a) Coupling strength of the three mode volumes against the strong-coupling boundary, with and without dephasing; vertical line, Q = 4 600. (b) Excited-state population for
+        three Q values (dotted: without dephasing) and without cavity. (c) Spectrum of the light leaving the cavity (log scale) versus detuning; dotted: real parts of the coupled-mode frequencies.</figcaption>
+    </figure>
+    <p><b>Result.</b> With the Q and V of [2] the Purcell formula gives <span data-k="D.rows.0.F" data-f="f0"></span> ([2]: 1340). The Purcell factor used in [2],
+      $F_P = \tau_0(1/\tau_{\rm on} - 1/\tau_{\rm off})/({\rm DW}\,\varepsilon)$, with its lifetimes (τ<sub>0</sub> = 5.97, τ<sub>on</sub> = 0.97, τ<sub>off</sub> = 4.27 ns) and DW = 15%, gives
+      F<sub>P</sub> = <span data-k="S.d_F_meas"></span>/ε, their lower bound of 31 for ε = 1; since F<sub>P</sub> cannot exceed (3/4π²)Q/V, the measurement implies ε ≥ <span data-k="S.d_eps_min"></span>.
+      With this dephasing the nanobeam cannot reach strong coupling at any Q (4g stays below 2γ*); the 10 nm bowtie can, for Q above <span data-k="S.d_Q_strong_bt"></span>, about five times its 2D in-plane Q.
+      In the bowtie cavity the master-equation decay rate is <span data-k="S.d_rates.4600.me"></span> ns⁻¹ at Q = 4 600, close to the Purcell rate with dephasing (<span data-k="S.d_rates.4600.purcell"></span> ns⁻¹);
+      at Q = 10<sup>5</sup> and 10<sup>6</sup> it is <span data-k="S.d_rates.100000.me"></span> and <span data-k="S.d_rates.1000000.me"></span> ns⁻¹ against <span data-k="S.d_rates.100000.purcell"></span> and
+      <span data-k="S.d_rates.1000000.purcell"></span> from the formula, which no longer applies. At zero detuning the spectrum peaks at <span data-k="S.d_split"></span> g, inside the coupled-mode frequencies
+      <span data-k="S.d_cm"></span> g, the quantity [5] obtains from a single QNM of the bare cavity; the two broad lines overlap. A unit test checks that the coupled-mode eigenvalues equal those of the
+      Liouvillian in the one-excitation coherences.</p>
+  </section>
+
+  <section id="outlook">
+    <h2>Outlook</h2>
+    <dl class="desc">
+      <dt>3D.</dt><dd>The same QNM workflow for the full membrane, with the radiation out of the plane, a real Q, and mode volumes without the effective-index step.</dd>
+      <dt>Design.</dt><dd>The perturbation sensitivities of Section 3 are the gradients that inverse design needs; topology-optimised cavities as in [4].</dd>
+      <dt>Electrons.</dt><dd>3D trajectories near and through the membrane, and coupling constants for the electron-microscopy experiments of the network.</dd>
+      <dt>Emitters.</dt><dd>Phonon sideband and spectral diffusion of the G centre, several QNMs, and the coupled QNM frequencies of [5] from the 3D field.</dd>
+    </dl>
+  </section>
+
+  <section id="evidence">
+    <h2>Code and reproduction</h2>
+    <p>Simplifications: a 2D model with an effective index and a constant silicon index (in-plane Q, V estimated as A h<sub>eff</sub>); designs scaled in-plane to 1278 nm in this model; the electron as a line
+      charge on an aloof path; the G centre as a two-level system with published lifetime, Debye–Waller factor and a range of quantum efficiencies.</p>
+<pre class="verb">python -m venv .venv && .venv/bin/pip install -e . ngsolve pytest
+cd scripts
+../.venv/bin/python run_moduleA.py                      # QNM checks
+OMP_NUM_THREADS=1 ../.venv/bin/python run_moduleB.py    # designs, ensemble
+../.venv/bin/python run_moduleC.py && ../.venv/bin/python run_moduleD.py
+../.venv/bin/python plots.py && ../.venv/bin/python build_site.py</pre>
+    <p class="code"><a href="REPO">repository</a><a href="REPO/blob/main/src/sqed/fem.py">fem.py</a><a href="REPO/blob/main/src/sqed/cavity.py">cavity.py</a><a href="REPO/blob/main/src/sqed/jc.py">jc.py</a><a href="REPO/tree/main/tests">tests</a></p>
+    <p class="small">Publication figures (PDF):</p>
+    <div class="figlist" id="figlist"></div>
+    <h3 style="font-size:17px;margin:18px 0 6px">References</h3>
+    <ol class="refs">
+      <li><span>P. T. Kristensen, K. Herrmann, F. Intravaia, K. Busch, "Modeling electromagnetic resonators using quasinormal modes", Adv. Opt. Photon. 12, 612 (2020), <a href="https://arxiv.org/abs/1910.05412">arXiv:1910.05412</a>.</span></li>
+      <li><span>K.-Y. Kim, C.-M. Lee, A. Boreiri, P. Purkayastha, F. Islam, S. Harper, J.-H. Kim, E. Waks, "Bright and Purcell-enhanced single photon emission from a silicon G center", Nano Lett. 25, 4347 (2025), <a href="https://arxiv.org/abs/2412.10603">arXiv:2412.10603</a>.</span></li>
+      <li><span>G. Kountouris, J. Mørk, E. V. Denning, P. T. Kristensen, "Modal properties of dielectric bowtie cavities with deep sub-wavelength confinement", Opt. Express 30 (2022), doi:10.1364/OE.472793, <a href="https://arxiv.org/abs/2207.06328">arXiv:2207.06328</a>.</span></li>
+      <li><span>M. Albrechtsen et al., "Nanometer-scale photon confinement in topology-optimized dielectric cavities", Nat. Commun. 13, 6281 (2022), <a href="https://arxiv.org/abs/2108.01681">arXiv:2108.01681</a>.</span></li>
+      <li><span>M. Abutoama, G. Kountouris, J. Mørk, P. T. Kristensen, "Semi-analytical framework for modeling strong coupling of quantum emitters in electromagnetic resonators", <a href="https://arxiv.org/abs/2308.12957">arXiv:2308.12957</a> (2023).</span></li>
+      <li><span>P. T. Kristensen, T. Kiel, K. Busch, F. Intravaia, "Influence of random surface deformations on the resonance frequencies and quality factors of optical cavities and plasmonic nanoparticles", <a href="https://arxiv.org/abs/2604.20607">arXiv:2604.20607</a> (2026).</span></li>
+      <li><span>S. G. Johnson et al., "Perturbation theory for Maxwell's equations with shifting material boundaries", Phys. Rev. E 65, 066611 (2002).</span></li>
+      <li><span>C. Sauvan, J. P. Hugonin, I. S. Maksymov, P. Lalanne, "Theory of the spontaneous optical emission of nanosize photonic and plasmon resonators", Phys. Rev. Lett. 110, 237401 (2013).</span></li>
+      <li><span>F. J. García de Abajo, "Optical excitations in electron microscopy", Rev. Mod. Phys. 82, 209 (2010).</span></li>
+      <li><span>J.-W. Henke et al., Nature 600, 653 (2021), <a href="https://arxiv.org/abs/2105.03729">arXiv:2105.03729</a>; A. Feist et al., Science 377, 777 (2022), <a href="https://arxiv.org/abs/2202.12821">arXiv:2202.12821</a>.</span></li>
+      <li><span>M. A. Green, Sol. Energ. Mat. Sol. Cells 92, 1305 (2008), via refractiveindex.info (CC0).</span></li>
+      <li><span>J. Schöberl, NGSolve finite-element library, <a href="https://ngsolve.org">ngsolve.org</a>.</span></li>
+    </ol>
+  </section>
+</article>
+
+<footer>Prepared by Alejandro Guirado as a work sample for the application to the <a href="https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_2001/job/8305/" target="_blank" rel="noopener">PhD scholarship in Silicon Quantum Electrodynamics at the Deep Nanoscale at DTU Electro</a> (QUEST doctoral network).
+  Educational results from public data and simplified tools. Not affiliated with DTU or the QUEST network.</footer>
+
+<script>
+const REPO = "https://github.com/AlejandroGuiradoMexa/quest-siliconqed";
+document.querySelectorAll('a[href^="REPO"]').forEach(a => a.href = a.getAttribute("href").replace("REPO", REPO));
+const root = document.documentElement;
+const css = v => getComputedStyle(root).getPropertyValue(v).trim();
+function axis(extra = {}) {
+  return Object.assign({ showline: true, mirror: "ticks", linecolor: css("--ink"), linewidth: 1, ticks: "inside", ticklen: 6,
+    tickcolor: css("--ink"), showgrid: false, zeroline: false, minor: { ticks: "inside", ticklen: 3, tickcolor: css("--ink") } }, extra);
+}
+function layout(extra = {}) {
+  const leg = { x: 0.98, xanchor: "right", y: 0.98, yanchor: "top", bgcolor: css("--sheet"), bordercolor: css("--ink"), borderwidth: .6, font: { size: 12 } };
+  const l = Object.assign({ paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
+    font: { family: '"LM Roman", "Latin Modern Roman", Georgia, serif', color: css("--ink"), size: 13 }, margin: { l: 62, r: 12, t: 8, b: 46 } }, extra);
+  l.legend = Object.assign(leg, extra.legend || {});
+  const ax = e => axis(Object.assign(e && e.type === "log" ? { dtick: 1 } : {}, e));
+  l.xaxis = ax(extra.xaxis); l.yaxis = ax(extra.yaxis);
+  if (extra.yaxis2) l.yaxis2 = ax(Object.assign({ mirror: false }, extra.yaxis2));
+  return l;
+}
+const S = { layout, cfg: { displayModeBar: false, responsive: true },
+  col: { data: "#111111", c1: "#1f5fa8", c2: "#c0392b", c3: "#2e8b57", c4: "#d4820a", muted: "#777777" } };
+document.querySelectorAll("#layout button[data-href]").forEach(b => b.onclick = () => { location.href = b.dataset.href + location.search + location.hash; });
+</script>
+<script src="page.js"></script>
+</body>
+</html>
